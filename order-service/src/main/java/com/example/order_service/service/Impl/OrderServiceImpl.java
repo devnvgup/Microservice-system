@@ -38,7 +38,8 @@ public class OrderServiceImpl implements OrderService {
             total = total.add(itemTotal);
             order.addItem(item);
         }
-        return new OrderEntity();
+        order.setTotalAmount(total);
+       return orderRepository.save(order);
     }
 
 }
