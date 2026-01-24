@@ -1,17 +1,11 @@
 package com.example.order_service.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.example.order_service.Enum.OrderStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +25,9 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "user_id", nullable = false, length = 50)
     private String userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private String status;
+    private OrderStatus status;
 
     @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
     private BigDecimal totalAmount;
@@ -43,6 +38,10 @@ public class OrderEntity extends BaseEntity {
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    private List<OrderItemEntity> items;
-    
+    private List<OrderItemEntity> items = new ArrayList<>();
+
+    public void addItem(OrderItemEntity item) {
+        items.add(item);
+        item.setOrder(this);
+    }
 }

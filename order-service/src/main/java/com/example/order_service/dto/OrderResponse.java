@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.order_service.Enum.OrderStatus;
 import lombok.*;
 
 @Getter
@@ -18,7 +19,7 @@ public class OrderResponse {
 
     private String userId;
 
-    private String status;
+    private OrderStatus status;
 
     private BigDecimal totalAmount;
 

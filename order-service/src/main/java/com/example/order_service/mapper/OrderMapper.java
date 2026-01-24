@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 import com.example.order_service.dto.OrderItemResponse;
 import com.example.order_service.dto.OrderResponse;
 import com.example.order_service.entity.OrderEntity;
+import org.springframework.stereotype.Component;
+
+@Component
 
 public class OrderMapper {
     public static OrderResponse toResponse(OrderEntity order) {
@@ -13,7 +16,6 @@ public class OrderMapper {
                 .userId(order.getUserId())
                 .status(order.getStatus())
                 .totalAmount(order.getTotalAmount())
-                .createdAt(order.getCreatedAt())
                 .items(
                         order.getItems()
                                 .stream()
