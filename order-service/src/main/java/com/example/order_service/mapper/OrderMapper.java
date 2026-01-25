@@ -1,5 +1,6 @@
 package com.example.order_service.mapper;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.order_service.dto.OrderItemResponse;
@@ -28,5 +29,11 @@ public class OrderMapper {
                                 .collect(Collectors.toList())
                 )
                 .build();
+    }
+
+    public static List<OrderResponse> toResponseList(List<OrderEntity> orders) {
+        return orders.stream()
+                .map(OrderMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }

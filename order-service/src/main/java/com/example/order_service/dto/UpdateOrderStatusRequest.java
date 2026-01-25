@@ -1,4 +1,5 @@
 package com.example.order_service.dto;
+import com.example.order_service.Enum.OrderStatus;
 import lombok.*;
 
 @Getter
@@ -7,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 
 public class UpdateOrderStatusRequest {
-    private String status;
+    private OrderStatus status;
 }
