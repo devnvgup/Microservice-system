@@ -6,11 +6,14 @@ import com.example.order_service.dto.CreateOrderRequest;
 import com.example.order_service.dto.OrderResponse;
 import com.example.order_service.entity.OrderEntity;
 import com.example.order_service.entity.OrderItemEntity;
+import com.example.order_service.kafka.OrderCreatedEvent;
+import com.example.order_service.kafka.producer.OrderEventProducer;
 import com.example.order_service.mapper.OrderMapper;
 import com.example.order_service.repository.OrderRepository;
 import com.example.order_service.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +25,8 @@ import java.util.Optional;
 @Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final OrderEventProducer orderEventProducer;
+    private final ApplicationEventPublisher eventPublisher;
     @Override
     public OrderResponse createOrder(CreateOrderRequest request) {
         OrderEntity order = new OrderEntity();
@@ -44,6 +49,16 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setTotalAmount(total);
         order = orderRepository.save(order);
+        // not send kafka in here, event publish local, only send when transaction commit
+        OrderCreatedEvent event = new OrderCreatedEvent(
+                order.getId(),
+                order.getUserId(),
+                order.getTotalAmount()
+        );
+
+        eventPublisher.publishEvent(event);
+
+        orderEventProducer.publishOrderCreated(event);
        return OrderMapper.toResponse(order);
     }
 
@@ -78,6 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
+
     }
 
 
