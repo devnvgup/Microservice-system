@@ -2,23 +2,12 @@ package com.example.order_service.entity;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "order_item")
 public class OrderItemEntity extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +24,61 @@ public class OrderItemEntity extends BaseEntity {
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
+
+    // ===== Constructor rỗng (BẮT BUỘC cho JPA) =====
+    public OrderItemEntity() {
+    }
+
+    // ===== All-args constructor =====
+    public OrderItemEntity(Long id, OrderEntity order, String productId,
+                           Integer quantity, BigDecimal price) {
+        this.id = id;
+        this.order = order;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    // ===== Getter & Setter =====
+
+    public Long getId() {
+        return id;
+    }
+
+    // Thường không nên public setId nếu auto generate
+    // public void setId(Long id) {
+    //     this.id = id;
+    // }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 }
